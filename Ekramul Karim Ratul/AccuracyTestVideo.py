@@ -47,3 +47,26 @@ from keras.applications.vgg16 import preprocess_input
 X = preprocess_input(X, mode='tf')      # preprocessing the input data
 from sklearn.model_selection import train_test_split
 X_train, X_valid, y_train, y_valid = train_test_split(X, dummy_y, test_size=0.3, random_state=42)    # preparing the validation set
+from keras.models import Sequential
+from keras.applications.vgg16 import VGG16
+from keras.layers import Dense, InputLayer, Dropout
+
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))    # include_top=False to remove the top layer
+
+X_train = base_model.predict(X_train)
+X_valid = base_model.predict(X_valid)
+X_train.shape, X_valid.shape
+
+X_train = X_train.reshape(208, 7*7*512)      # converting to 1-D
+X_valid = X_valid.reshape(90, 7*7*512)
+
+train = X_train/X_train.max()      # centering the data
+X_valid = X_valid/X_train.max()
+
+model = Sequential()
+model.add(InputLayer((7*7*512,)))    # input layer
+model.add(Dense(units=1024, activation='sigmoid')) # hidden layer
+model.add(Dense(3, activation='softmax'))    # output layer
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit(train, y_train, epochs=100, validation_data=(X_valid, y_valid))

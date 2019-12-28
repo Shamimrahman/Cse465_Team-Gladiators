@@ -1,1 +1,5 @@
+1. The actual classes for the testing images can be found in testing.csv file.
 
+2. After extracting the frames from the new video, I have loaded the test.csv file which contains the names of each extracted frame. 
+
+3. I have labelled all the images which contains each image name and their corresponding class (0 or 1 or 2) in  mapping.csv file.

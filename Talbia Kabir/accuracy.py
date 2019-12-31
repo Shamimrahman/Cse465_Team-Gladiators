@@ -91,4 +91,6 @@ callbacks_list = [checkpoint]
 model.load_weights("weights.best.hdf5")
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+print ("Done Accuracy")
+
 

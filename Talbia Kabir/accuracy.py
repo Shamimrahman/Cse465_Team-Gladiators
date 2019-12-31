@@ -1,10 +1,10 @@
 
 import math   
 import matplotlib.pyplot as plt    
-matplotlib inline
+
 import pandas as pd
 from keras.preprocessing import image  
-import numpy as np    
+
 from keras.utils import np_utils
 from skimage.transform import resize
 
@@ -15,16 +15,9 @@ frameRate = cap.get(5)
 x=1
 
 
-while(cap.isOpened()):
-    frameId = cap.get(1) 
-    ret, frame = cap.read()
-    if (ret != True):
-        break
-    if (frameId % math.floor(frameRate) == 0):
-        filename ="frame%d.jpg" % count;count+=1
-        cv2.imwrite(filename, frame)
-cap.release()
-print ("Done!")
+
+  cap.release()
+   print ("Done!")
 
 img = plt.imread('frame0.jpg')  
 plt.imshow(img)
@@ -49,22 +42,6 @@ for i in range(0,X.shape[0]):
     
 X = np.array(image)
 
-from keras.applications.vgg16 import preprocess_input
-X = preprocess_input(X, mode='tf')      
-from sklearn.model_selection import train_test_split
-X_train, X_valid, y_train, y_valid = train_test_split(X, dummy_y, test_size=0.3, random_state=42)  
-
-from keras.models import Sequential
-from keras.applications.vgg16 import VGG16
-from keras.layers import Dense, InputLayer, Dropout
-
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3)) 
-
-X_train = base_model.predict(X_train)
-X_valid = base_model.predict(X_valid)
-X_train.shape, X_valid.shape
-X_train = X_train.reshape(208, 7*7*512)     
-X_valid = X_valid.reshape(90, 7*7*512)
 
 train = X_train/X_train.max()     
 X_valid = X_valid/X_train.max()
@@ -114,5 +91,4 @@ callbacks_list = [checkpoint]
 model.load_weights("weights.best.hdf5")
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-scores = model.evaluate(test_image, test_y)
-print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100)
+
